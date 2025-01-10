@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorAccent">#FF4081</color> <!-- Example color, you can change it to whatever you prefer -->
+
+    <!-- Other color definitions -->
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorBackground">#FFFFFF</color>
+        <color name="black">#FF000000</color>
+        <color name="white">#FFFFFFFF</color>
+        <color name="primary">#1976D2</color>
+        <color name="primary_dark">#1565C0</color>
+    <color name="primary_color">#1976D2</color>
+    <color name="primary_dark_color">#1565C0</color>
+    <color name="accent">#FFA000</color>
+    <color name="background_color">#F5F5F5</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="divider_color">#E0E0E0</color>
+    <!-- Event-specific colors -->
+    <color name="cleanup_color">#4CAF50</color>
+    <color name="food_color">#FF5722</color>
+    <color name="fitness_color">#2196F3</color>
+    <color name="art_color">#9C27B0</color>
+    <color name="tech_color">#607D8B</color>
+    <color name="default_color">#795548</color>
+    </resources>
