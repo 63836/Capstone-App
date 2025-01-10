@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Main Content Container -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Include the original point section layout (without transaction history) -->
+        <include layout="@layout/activity_pointsection_main"/>
+
+        <!-- Overlay the standalone hamburger menu icon at top left -->
+        <ImageButton
+            android:id="@+id/hamburgerButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="top|start"
+            android:layout_margin="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_menu"
+            android:contentDescription="Menu"
+            app:tint="@color/white"/>
+
+        <!-- Floating Action Button for ChatBot at bottom right -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/chatBotButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            app:srcCompat="@drawable/ic_chat"
+            android:contentDescription="Chat Bot"
+            app:tint="@color/white"/>
+    </FrameLayout>
+
+    <!-- Side Drawer: Transaction History -->
+    <LinearLayout
+        android:id="@+id/nav_drawer"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="start"
+        android:background="@color/primary_green_light"
+        android:padding="16dp">
+
+        <!-- Transaction History block (cut from original layout) -->
+        <TextView
+            android:id="@+id/historyTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/alexandria_bold"
+            android:text="Transaction History"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingBottom="16dp"/>
+    </LinearLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>
