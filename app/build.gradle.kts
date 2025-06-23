@@ -14,7 +14,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField ("String", "GROQ_API_KEY", "\"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\"")
+        buildConfigField ("String", "GROQ_API_KEY", "\"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\"")
     }
 
     buildTypes {
@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.swiperefreshlayout)
+    implementation (libs.osmdroid.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -57,6 +58,20 @@ dependencies {
     implementation("com.aallam.openai:openai-client:3.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation ("org.json:json:20210307")
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.github.bumptech.glide:glide:4.15.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.facebook.android:facebook-login:9.2.0")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("com.facebook.android:facebook-login:+")
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+    implementation ("com.google.maps.android:android-maps-utils:2.3.0")
+
+
+
 
 
 

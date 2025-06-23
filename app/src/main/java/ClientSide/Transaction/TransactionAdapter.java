@@ -1,13 +1,19 @@
-package com.example.myapplication;
+package ClientSide.Transaction;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.myapplication.R;
+import com.google.android.material.appbar.MaterialToolbar;
+
 import java.util.List;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> {
@@ -45,8 +51,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.amountTextView.setTextColor(context.getResources().getColor(android.R.color.holo_green_dark));
         }
         holder.dateTextView.setText(transaction.getDate());
+        // (Optional) You can show the unique code in a hidden view or tooltip if desired.
+        // For now, we rely on the details page to show it.
 
-        // Set click listener to notify the callback
+        // Set click listener to notify the callback.
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onTransactionClick(transaction);
@@ -66,6 +74,41 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             descriptionTextView = itemView.findViewById(R.id.descriptionTextView);
             amountTextView = itemView.findViewById(R.id.amountTextView);
             dateTextView = itemView.findViewById(R.id.dateTextView);
+        }
+    }
+
+    public static class ProofOfClaimActivity extends AppCompatActivity {
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_proof_of_claim);
+
+            MaterialToolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Proof of Claim");
+
+            String description = getIntent().getStringExtra("TRANSACTION_DESCRIPTION");
+            int amount = getIntent().getIntExtra("TRANSACTION_AMOUNT", 0);
+            String date = getIntent().getStringExtra("TRANSACTION_DATE");
+            String uniqueCode = getIntent().getStringExtra("TRANSACTION_CODE");
+
+            TextView descriptionTextView = findViewById(R.id.descriptionTextView);
+            TextView amountTextView = findViewById(R.id.amountTextView);
+            TextView dateTextView = findViewById(R.id.dateTextView);
+            TextView uniqueCodeTextView = findViewById(R.id.uniqueCodeTextView);
+
+            descriptionTextView.setText(description);
+            amountTextView.setText(amount + " Points");
+            dateTextView.setText(date);
+            uniqueCodeTextView.setText(uniqueCode);
+        }
+
+        @Override
+        public boolean onSupportNavigateUp() {
+            onBackPressed();
+            return true;
         }
     }
 }

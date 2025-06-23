@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package ClientSide.Transaction;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,18 +7,26 @@ public class Transaction implements Parcelable {
     private String description;
     private int amount;
     private String date;
+    private String uniqueCode;
 
-    public Transaction(String description, int amount, String date) {
+    public Transaction(String description, int amount, String date, String uniqueCode) {
         this.description = description;
         this.amount = amount;
         this.date = date;
+        this.uniqueCode = uniqueCode;
     }
 
-    // Parcelable implementation
+    // Fallback constructor if no unique code is provided.
+    public Transaction(String description, int amount, String date) {
+        this(description, amount, date, "");
+    }
+
+    // Parcelable implementation.
     protected Transaction(Parcel in) {
         description = in.readString();
         amount = in.readInt();
         date = in.readString();
+        uniqueCode = in.readString();
     }
 
     @Override
@@ -26,6 +34,7 @@ public class Transaction implements Parcelable {
         dest.writeString(description);
         dest.writeInt(amount);
         dest.writeString(date);
+        dest.writeString(uniqueCode);
     }
 
     @Override
@@ -49,4 +58,5 @@ public class Transaction implements Parcelable {
     public String getDescription() { return description; }
     public int getAmount() { return amount; }
     public String getDate() { return date; }
+    public String getUniqueCode() { return uniqueCode; }
 }

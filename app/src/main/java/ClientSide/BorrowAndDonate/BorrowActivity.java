@@ -1,6 +1,5 @@
-package com.example.myapplication;
+package ClientSide.BorrowAndDonate;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,14 +7,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,31 +44,34 @@ public class BorrowActivity extends AppCompatActivity {
         items.add(new BorrowItem("Hammer", R.drawable.hammer, 5));
         items.add(new BorrowItem("Screwdriver Set", R.drawable.screwdriver_set, 3));
         items.add(new BorrowItem("Drill", R.drawable.drill, 2));
-        // Add more items as needed
-
         BorrowItemAdapter adapter = new BorrowItemAdapter(items);
         itemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         itemsRecyclerView.setAdapter(adapter);
     }
 
     private void submitBorrowRequest() {
-        String name = nameEditText.getText().toString();
-        String mobileNumber = mobileNumberEditText.getText().toString();
-        String message = messageEditText.getText().toString();
+        String name = nameEditText.getText().toString().trim();
+        String mobileNumber = mobileNumberEditText.getText().toString().trim();
+        String message = messageEditText.getText().toString().trim();
 
         if (name.isEmpty() || mobileNumber.isEmpty() || message.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        new AlertDialog.Builder(this)
-                .setTitle("Borrow Request Submitted")
-                .setMessage("Thank you. Please come to the Barangay to get your borrowed item.")
-                .setPositiveButton("OK", (dialog, which) -> {
-                    dialog.dismiss();
-                    finish();
-                })
-                .show();
+        if (name.matches("\\d+")) {
+            Toast.makeText(this, "Please enter a valid name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Mobile number must be exactly 11 digits.
+        if (!mobileNumber.matches("\\d{11}")) {
+            Toast.makeText(this, "Please enter a valid 11-digit mobile number", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Toast.makeText(this, "Borrow Request Submitted. Thank you. Please come to the Barangay to get your borrowed item.", Toast.LENGTH_LONG).show();
+        finish();
     }
 
     private static class BorrowItem {
@@ -125,4 +126,3 @@ public class BorrowActivity extends AppCompatActivity {
         }
     }
 }
-

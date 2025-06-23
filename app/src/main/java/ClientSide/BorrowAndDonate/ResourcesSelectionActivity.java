@@ -1,10 +1,11 @@
-package com.example.myapplication;
+package ClientSide.BorrowAndDonate;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.R;
 import com.google.android.material.button.MaterialButton;
 
 public class ResourcesSelectionActivity extends AppCompatActivity {

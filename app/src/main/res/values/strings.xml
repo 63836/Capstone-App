@@ -21,6 +21,9 @@
     <string name="menu_reflow">Reflow</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_settings">Settings</string>
+    <string name="facebook_app_id">3122624904558120</string>
+    <string name="facebook_client_token">5e4686ca3ae66a113808b574558d3cf5</string>
+
 
     <string name="lorem_ipsum_title">Lorem Ipsum"</string>
     <string name="lorem_ipsum">Lorem Ipsum is simply placeholder text of the printing and
@@ -32,4 +35,12 @@
     <string name="image_view_item_transform_content_description">Represents an image view in the
         item
     </string>
+    <string-array name="filter_options">
+        <item>Days</item>
+        <item>Weeks</item>
+        <item>Months</item>
+        <item>Years</item>
+
+    </string-array>
+
 </resources>

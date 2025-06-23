@@ -5,13 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
-    tools:context=".EventPageActivity">
+    android:background="@color/light_background_color"
+    tools:context="ClientSide.EventsAndNews.EventPageActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary_color">
+        android:background="@color/primary_green">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -26,12 +26,15 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/primary_green_dark"
             app:tabMode="scrollable"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="@android:color/white"
-            app:tabSelectedTextColor="@android:color/white"
-            app:tabTextColor="@android:color/white"
-            app:tabTextAppearance="@style/CustomTabTextAppearance"/>
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@android:color/white"
+        app:tabIndicatorHeight="4dp"
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabTextColor="@color/white_translucent"
+        app:tabTextAppearance="@style/CustomTabTextAppearance"
+        app:tabRippleColor="@color/white"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -40,6 +43,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-

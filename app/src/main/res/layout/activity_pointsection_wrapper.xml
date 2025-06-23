@@ -10,10 +10,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <!-- Include the original point section layout (without transaction history) -->
         <include layout="@layout/activity_pointsection_main"/>
-
         <!-- Overlay the standalone hamburger menu icon at top left -->
         <ImageButton
             android:id="@+id/hamburgerButton"
@@ -25,17 +23,8 @@
             android:src="@drawable/ic_menu"
             android:contentDescription="Menu"
             app:tint="@color/white"/>
-
         <!-- Floating Action Button for ChatBot at bottom right -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/chatBotButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            app:srcCompat="@drawable/ic_chat"
-            android:contentDescription="Chat Bot"
-            app:tint="@color/white"/>
+
     </FrameLayout>
 
     <!-- Side Drawer: Transaction History -->
@@ -47,7 +36,6 @@
         android:layout_gravity="start"
         android:background="@color/primary_green_light"
         android:padding="16dp">
-
         <!-- Transaction History block (cut from original layout) -->
         <TextView
             android:id="@+id/historyTitle"
@@ -58,7 +46,6 @@
             android:text="Transaction History"
             android:textColor="@color/text_primary"
             android:textSize="18sp"/>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
@@ -66,5 +53,4 @@
             android:clipToPadding="false"
             android:paddingBottom="16dp"/>
     </LinearLayout>
-
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -6,20 +6,18 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="1dp">
-
+    app:cardElevation="1dp"
+    app:cardBackgroundColor="@color/white">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:orientation="horizontal">
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
-
             <TextView
                 android:id="@+id/descriptionTextView"
                 android:layout_width="wrap_content"
@@ -28,7 +26,6 @@
                 android:textSize="16sp"
                 android:textColor="@color/text_primary"
                 android:fontFamily="@font/alexandria_bold"/>
-
             <TextView
                 android:id="@+id/dateTextView"
                 android:layout_width="wrap_content"
@@ -37,20 +34,15 @@
                 android:textSize="14sp"
                 android:textColor="@color/text_secondary"
                 android:layout_marginTop="4dp"/>
-
         </LinearLayout>
-
         <TextView
             android:id="@+id/amountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+50 Points"
             android:textSize="16sp"
-            android:textColor="@android:color/holo_green_dark"
+            android:textColor="@color/primary_green"
             android:fontFamily="@font/alexandria_bold"
             android:layout_gravity="center_vertical"/>
-
     </LinearLayout>
-
 </com.google.android.material.card.MaterialCardView>
-
