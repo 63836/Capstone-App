@@ -44,7 +44,6 @@ import ClientSide.EventsAndNews.LocalNewsAlertsActivity;
 import ClientSide.LoginAndSignup.MainActivity;
 import ClientSide.Notifications.NotificationBottomSheet;
 import ClientSide.Notifications.NotificationStatus;
-import ClientSide.Reports.DisplayPhotoActivity;
 import ClientSide.Reports.ReportConcernActivity;
 import ClientSide.Rewards.RewardsActivity;
 import ClientSide.Transaction.Transaction;
@@ -78,17 +77,7 @@ public class Pointsection extends AppCompatActivity {
     private TransactionAdapter transactionAdapter;
     private List<Transaction> transactionList;
 
-    // Launcher for camera intent result
-    private final ActivityResultLauncher<Intent> cameraLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK) {
-                    Intent intent = new Intent(this, DisplayPhotoActivity.class);
-                    intent.putExtra("photoPath", currentPhotoPath);
-                    startActivity(intent);
-                }
-            }
-    );
+
 
     // Launcher for barcode scanning
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
@@ -246,33 +235,7 @@ public class Pointsection extends AppCompatActivity {
         numberTextView.setText(String.valueOf(currentPoints));
     }
 
-    private void openCamera() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
-                    REQUEST_CAMERA_PERMISSION);
-        } else {
-            launchCamera();
-        }
-    }
 
-    private void launchCamera() {
-        Intent takePic = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePic.resolveActivity(getPackageManager()) != null) {
-            File photoFile;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                Toast.makeText(this, "Error creating file", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Uri photoURI = FileProvider.getUriForFile(
-                    this, "com.example.myapplication.fileprovider", photoFile);
-            takePic.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-            cameraLauncher.launch(takePic);
-        }
-    }
 
     private File createImageFile() throws IOException {
         String ts = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US)
@@ -283,23 +246,6 @@ public class Pointsection extends AppCompatActivity {
         return image;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CAMERA_PERMISSION
-                && grantResults.length > 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            launchCamera();
-        } else if (requestCode == PERMISSION_REQUEST_READ_EXTERNAL_STORAGE
-                && grantResults.length > 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            onStoragePermissionGranted();
-        } else {
-            Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     // Optional chatbot animations...
     private void showChatbotPanel() {

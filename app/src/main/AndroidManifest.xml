@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Required hardware and permissions -->
     <uses-feature android:name="android.hardware.camera" android:required="true" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
@@ -23,7 +22,6 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
 
-        <!-- Facebook configuration -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
@@ -31,21 +29,18 @@
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token"/>
 
-        <!-- Add this activity declaration -->
         <activity
             android:name="ClientSide.LoginAndSignup.SignInActivity"
-            android:exported="false">  <!-- Or exported="true" if you need to launch it from other apps -->
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
 
-        <!-- Define your activities -->
         <activity android:name="ClientSide.Transaction.TransactionAdapter$ProofOfClaimActivity" android:exported="false" />
         <activity android:name="ClientSide.PointsSEction.Pointsection" android:exported="false" />
         <activity android:name="com.journeyapps.barcodescanner.CaptureActivity" />
         <activity android:name="ClientSide.EventsAndNews.EventPageActivity" />
-        <activity android:name="ClientSide.Reports.DisplayPhotoActivity" />
         <activity android:name="ClientSide.QRscan.QRCodeActivity" />
         <activity android:name="ClientSide.LoginAndSignup.MainActivity" android:exported="true">
             <intent-filter>
@@ -53,11 +48,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="ClientSide.BorrowAndDonate.ResourcesSelectionActivity" />
-        <activity android:name="ClientSide.Reports.LostFoundReportActivity" />
         <activity android:name="ClientSide.EventsAndNews.LocalNewsAlertsActivity" />
-        <activity android:name="ClientSide.BorrowAndDonate.DonateActivity" />
-        <activity android:name="ClientSide.BorrowAndDonate.BorrowActivity" />
         <activity android:name="AdminFiles.MainDashboard.AdminActivity" android:exported="true" />
         <activity android:name="AdminFiles.ADminEvents.CreateEventActivity" android:exported="true" />
         <activity android:name="ClientSide.Reports.ReportsActivity" android:exported="true" />
@@ -73,7 +64,6 @@
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-        <!-- FileProvider configuration -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.myapplication.fileprovider"
@@ -84,23 +74,17 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!-- Other meta-data -->
         <meta-data
             android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts"
-            />
+            android:resource="@array/preloaded_fonts" />
 
-        <!-- ****************************************************************** -->
-        <!-- *** IMPORTANT: ADDED a meta-data tag for the LATEST renderer   *** -->
-        <!-- ****************************************************************** -->
         <meta-data
             android:name="com.google.android.gms.maps.renderer"
             android:value="LATEST" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAVC8KWaoedx8oTBslMCnhasC-p02ygd5Q"/>
-
+            android:value="YOUR_API_KEY"/>
 
     </application>
 </manifest>
