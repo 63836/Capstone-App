@@ -45,8 +45,8 @@ public class ReportsActivity extends AppCompatActivity {
         reportsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         if (reportList.isEmpty()) {
-            reportList.add(new Report("Lost Wallet", "Wallet lost near the market.", "Market Area", "Lost and Found", null));
-            reportList.add(new Report("Broken Street Light", "Street light is broken on Main St.", "Main St", "Hazards", null));
+            reportList.add(new Report("Lost Wallet", "Wallet lost near the market.", "Market Area", "Lost and Found", null, 16.4103, 120.5960));
+            reportList.add(new Report("Broken Street Light", "Street light is broken on Main St.", "Main St", "Hazards", null, 16.4125, 120.5975));
         }
 
         filteredReports = new ArrayList<>(reportList);
@@ -58,6 +58,8 @@ public class ReportsActivity extends AppCompatActivity {
             intent.putExtra("location", report.getLocation());
             intent.putExtra("type", report.getType());
             intent.putExtra("imageUri", report.getImageUri());
+            intent.putExtra("latitude", report.getLatitude());
+            intent.putExtra("longitude", report.getLongitude());
             startActivity(intent);
         });
         reportsRecyclerView.setAdapter(reportAdapter);
@@ -105,13 +107,17 @@ public class ReportsActivity extends AppCompatActivity {
         private String location;
         private String type;
         private String imageUri;
+        private double latitude;
+        private double longitude;
 
-        public Report(String title, String description, String location, String type, String imageUri) {
+        public Report(String title, String description, String location, String type, String imageUri, double latitude, double longitude) {
             this.title = title;
             this.description = description;
             this.location = location;
             this.type = type;
             this.imageUri = imageUri;
+            this.latitude = latitude;
+            this.longitude = longitude;
         }
 
         public String getTitle() { return title; }
@@ -119,6 +125,8 @@ public class ReportsActivity extends AppCompatActivity {
         public String getLocation() { return location; }
         public String getType() { return type; }
         public String getImageUri() { return imageUri; }
+        public double getLatitude() { return latitude; }
+        public double getLongitude() { return longitude; }
     }
 
     public static class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportViewHolder> {

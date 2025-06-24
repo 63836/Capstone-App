@@ -9,12 +9,29 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-public class ReportDetailActivity extends AppCompatActivity {
+public class ReportDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    private GoogleMap mMap;
+    private double latitude;
+    private double longitude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_detail);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapPreview);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
 
         ImageView detailImageView = findViewById(R.id.detailImageView);
         TextView detailTitleTextView = findViewById(R.id.detailTitleTextView);
@@ -28,6 +45,8 @@ public class ReportDetailActivity extends AppCompatActivity {
         String location = getIntent().getStringExtra("location");
         String description = getIntent().getStringExtra("description");
         String imageUriString = getIntent().getStringExtra("imageUri");
+        latitude = getIntent().getDoubleExtra("latitude", 0);
+        longitude = getIntent().getDoubleExtra("longitude", 0);
 
         detailTitleTextView.setText(title);
         detailTypeTextView.setText("Type: " + type);
@@ -42,5 +61,15 @@ public class ReportDetailActivity extends AppCompatActivity {
         }
 
         backButton.setOnClickListener(v -> finish());
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        LatLng reportLocation = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(reportLocation).title("Report Location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(reportLocation, 15f));
+        mMap.getUiSettings().setAllGesturesEnabled(false);
     }
 }

@@ -220,7 +220,11 @@ public class ReportConcernActivity extends AppCompatActivity implements OnMapRea
                 lastKnownLocation.getLongitude(),
                 timestamp);
 
-        ReportsActivity.addReport(new ReportsActivity.Report(subject, description, locationString, "General Report", photoUri.toString()));
+        double latitude = lastKnownLocation.getLatitude();
+        double longitude = lastKnownLocation.getLongitude();
+
+        ReportsActivity.addReport(new ReportsActivity.Report(subject, description, locationString, "General Report", photoUri.toString(), latitude, longitude));
+
         Toast.makeText(this, "Report submitted successfully!", Toast.LENGTH_SHORT).show();
         finish();
     }
