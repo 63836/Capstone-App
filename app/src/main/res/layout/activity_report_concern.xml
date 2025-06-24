@@ -24,23 +24,16 @@
         android:layout_below="@id/reportHeader"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/rounded_input_bg"/>
-
-    <Button
-        android:id="@+id/btn_upload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upload Photo"
-        android:layout_below="@id/iv_photo"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"/>
+        android:background="@drawable/rounded_input_bg"
+        android:clickable="true"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/tv_subject_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Subject"
-        android:layout_below="@id/btn_upload"
+        android:layout_below="@id/iv_photo"
         android:layout_marginBottom="4dp"/>
 
     <EditText

@@ -1,6 +1,7 @@
 package ClientSide.Reports;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -12,7 +13,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
@@ -36,17 +40,41 @@ import java.util.Locale;
 
 public class ReportConcernActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2;
+    private static final int PERMISSIONS_REQUEST_CAMERA = 3;
+    private static final int PERMISSIONS_REQUEST_READ_STORAGE = 4;
+
 
     private ImageView ivPhoto;
-    private Button btnUpload, btnSubmit;
+    private Button btnSubmit;
     private EditText etSubject, etDescription;
     private FusedLocationProviderClient fusedLocationClient;
     private GoogleMap mMap;
 
+    private Uri photoUri;
     private String currentPhotoPath;
     private Location lastKnownLocation;
+
+    private final ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    photoUri = result.getData().getData();
+                    ivPhoto.setImageURI(photoUri);
+                    // Since we get a content URI, we don't have a file path directly.
+                    // The URI itself is sufficient for displaying and uploading.
+                    currentPhotoPath = photoUri.toString();
+                }
+            });
+
+    private final ActivityResultLauncher<Uri> cameraLauncher = registerForActivityResult(
+            new ActivityResultContracts.TakePicture(),
+            result -> {
+                if (result) {
+                    ivPhoto.setImageURI(photoUri);
+                    currentPhotoPath = photoUri.toString();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +83,6 @@ public class ReportConcernActivity extends AppCompatActivity implements OnMapRea
 
         // Initialize Views
         ivPhoto = findViewById(R.id.iv_photo);
-        btnUpload = findViewById(R.id.btn_upload);
         btnSubmit = findViewById(R.id.btn_submit);
         etSubject = findViewById(R.id.et_subject);
         etDescription = findViewById(R.id.et_description);
@@ -71,9 +98,55 @@ public class ReportConcernActivity extends AppCompatActivity implements OnMapRea
         }
 
         // Set up Listeners
-        btnUpload.setOnClickListener(v -> dispatchTakePictureIntent());
+        ivPhoto.setOnClickListener(v -> showImagePickerDialog());
         btnSubmit.setOnClickListener(v -> submitReport());
     }
+
+    private void showImagePickerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose Image Source");
+        builder.setItems(new CharSequence[]{"Camera", "Gallery"}, (dialog, which) -> {
+            switch (which) {
+                case 0:
+                    checkCameraPermissionAndLaunch();
+                    break;
+                case 1:
+                    checkStoragePermissionAndLaunchGallery();
+                    break;
+            }
+        });
+        builder.show();
+    }
+
+    private void checkCameraPermissionAndLaunch() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            launchCamera();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSIONS_REQUEST_CAMERA);
+        }
+    }
+
+    private void checkStoragePermissionAndLaunchGallery() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            launchGallery();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_READ_STORAGE);
+        }
+    }
+
+
+    private void launchCamera() {
+        photoUri = createImageUri();
+        if (photoUri != null) {
+            cameraLauncher.launch(photoUri);
+        }
+    }
+
+    private void launchGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        galleryLauncher.launch(intent);
+    }
+
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
@@ -99,6 +172,18 @@ public class ReportConcernActivity extends AppCompatActivity implements OnMapRea
                 getDeviceLocation();
             } else {
                 Toast.makeText(this, "Location permission is required to use this feature.", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == PERMISSIONS_REQUEST_CAMERA) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                launchCamera();
+            } else {
+                Toast.makeText(this, "Camera permission is required to take photos.", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == PERMISSIONS_REQUEST_READ_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                launchGallery();
+            } else {
+                Toast.makeText(this, "Storage permission is required to select photos.", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -138,54 +223,19 @@ public class ReportConcernActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                Toast.makeText(this, "Error occurred while creating the file", Toast.LENGTH_SHORT).show();
-            }
-
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.myapplication.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
-        }
+    private Uri createImageUri() {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "New Picture");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
+        return getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            ivPhoto.setImageURI(Uri.parse(currentPhotoPath));
-        }
-    }
-
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(null); // Use app-specific directory
-        File image = File.createTempFile(
-                imageFileName,
-                ".jpg",
-                storageDir
-        );
-
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
 
     private void submitReport() {
         String subject = etSubject.getText().toString().trim();
         String description = etDescription.getText().toString().trim();
 
-        if (subject.isEmpty() || description.isEmpty() || currentPhotoPath == null || currentPhotoPath.isEmpty()) {
+        if (subject.isEmpty() || description.isEmpty() || photoUri == null) {
             Toast.makeText(this, "Please fill all fields and upload a photo.", Toast.LENGTH_SHORT).show();
             return;
         }
