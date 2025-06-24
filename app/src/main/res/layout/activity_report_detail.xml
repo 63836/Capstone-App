@@ -1,53 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    tools:context="ClientSide.Reports.ReportDetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/detailImageView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_placeholder_item"
+            android:layout_marginBottom="16dp"/>
 
         <TextView
             android:id="@+id/detailTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Report Title"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"
-            android:fontFamily="@font/alexandria_bold" />
+            android:text="Subject"
+            android:textAppearance="?attr/textAppearanceHeadline5" />
 
         <TextView
             android:id="@+id/detailTypeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Report Type"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginTop="8dp"
+            android:text="Type"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Location:"
+            android:textAppearance="?attr/textAppearanceSubtitle2" />
 
         <TextView
             android:id="@+id/detailLocationTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Location"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp" />
+            android:text="Location Details"
+            android:textAppearance="?attr/textAppearanceBody1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Message:"
+            android:textAppearance="?attr/textAppearanceSubtitle2" />
 
         <TextView
             android:id="@+id/detailDescriptionTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Detailed description of the report goes here."
-            android:textSize="16sp"
-            android:layout_marginBottom="16dp" />
+            android:text="Detailed description of the report."
+            android:textAppearance="?attr/textAppearanceBody1" />
 
         <Button
             android:id="@+id/backButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Back" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:text="Back to List" />
+
     </LinearLayout>
 </ScrollView>

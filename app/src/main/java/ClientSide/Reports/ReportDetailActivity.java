@@ -1,11 +1,13 @@
 package ClientSide.Reports;
 
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 
 public class ReportDetailActivity extends AppCompatActivity {
@@ -14,6 +16,7 @@ public class ReportDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_detail);
 
+        ImageView detailImageView = findViewById(R.id.detailImageView);
         TextView detailTitleTextView = findViewById(R.id.detailTitleTextView);
         TextView detailTypeTextView = findViewById(R.id.detailTypeTextView);
         TextView detailLocationTextView = findViewById(R.id.detailLocationTextView);
@@ -24,17 +27,20 @@ public class ReportDetailActivity extends AppCompatActivity {
         String type = getIntent().getStringExtra("type");
         String location = getIntent().getStringExtra("location");
         String description = getIntent().getStringExtra("description");
+        String imageUriString = getIntent().getStringExtra("imageUri");
 
         detailTitleTextView.setText(title);
-        detailTypeTextView.setText(type);
+        detailTypeTextView.setText("Type: " + type);
         detailLocationTextView.setText(location);
         detailDescriptionTextView.setText(description);
 
-        backButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        if (imageUriString != null) {
+            Glide.with(this)
+                    .load(Uri.parse(imageUriString))
+                    .placeholder(R.drawable.ic_placeholder_item)
+                    .into(detailImageView);
+        }
+
+        backButton.setOnClickListener(v -> finish());
     }
 }

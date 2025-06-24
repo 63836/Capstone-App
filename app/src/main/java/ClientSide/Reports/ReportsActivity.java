@@ -1,12 +1,14 @@
 package ClientSide.Reports;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -14,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 
 import java.util.ArrayList;
@@ -26,12 +29,10 @@ public class ReportsActivity extends AppCompatActivity {
     private ReportAdapter reportAdapter;
     private List<Report> filteredReports;
 
-    // Static list to hold all reports (dummy and user-submitted)
     public static List<Report> reportList = new ArrayList<>();
 
-    // Public method to add a new report
     public static void addReport(Report report) {
-        reportList.add(report);
+        reportList.add(0, report);
     }
 
     @Override
@@ -43,45 +44,45 @@ public class ReportsActivity extends AppCompatActivity {
         reportsRecyclerView = findViewById(R.id.reportsRecyclerView);
         reportsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // If the list is empty, add some dummy reports
         if (reportList.isEmpty()) {
-            reportList.add(new Report("Lost Wallet", "Wallet lost near the market.", "Market Area", "Lost and Found"));
-            reportList.add(new Report("Broken Street Light", "Street light is broken on Main St.", "Main St", "Hazards"));
-            reportList.add(new Report("Borrow Request", "Need to borrow a ladder.", "Community Center", "Borrow"));
-            reportList.add(new Report("Found Keys", "Keys found in the park.", "City Park", "Lost and Found"));
+            reportList.add(new Report("Lost Wallet", "Wallet lost near the market.", "Market Area", "Lost and Found", null));
+            reportList.add(new Report("Broken Street Light", "Street light is broken on Main St.", "Main St", "Hazards", null));
         }
 
         filteredReports = new ArrayList<>(reportList);
 
-        reportAdapter = new ReportAdapter(filteredReports, new ReportAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Report report) {
-                // When a report is clicked, show the report details
-                Intent intent = new Intent(ReportsActivity.this, ReportDetailActivity.class);
-                intent.putExtra("title", report.getTitle());
-                intent.putExtra("description", report.getDescription());
-                intent.putExtra("location", report.getLocation());
-                intent.putExtra("type", report.getType());
-                startActivity(intent);
-            }
+        reportAdapter = new ReportAdapter(filteredReports, report -> {
+            Intent intent = new Intent(ReportsActivity.this, ReportDetailActivity.class);
+            intent.putExtra("title", report.getTitle());
+            intent.putExtra("description", report.getDescription());
+            intent.putExtra("location", report.getLocation());
+            intent.putExtra("type", report.getType());
+            intent.putExtra("imageUri", report.getImageUri());
+            startActivity(intent);
         });
         reportsRecyclerView.setAdapter(reportAdapter);
 
-        // Setup filter spinner with options
-        String[] filterOptions = {"All", "Lost and Found", "Hazards", "Borrow"};
+        String[] filterOptions = {"All", "Lost and Found", "Hazards", "Borrow", "General Report"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filterOptions);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filterSpinner.setAdapter(spinnerAdapter);
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedFilter = filterOptions[position];
-                filterReports(selectedFilter);
+                filterReports(filterOptions[position]);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (reportAdapter != null) {
+            filterReports(filterSpinner.getSelectedItem().toString());
+        }
     }
 
     private void filterReports(String filter) {
@@ -98,29 +99,29 @@ public class ReportsActivity extends AppCompatActivity {
         reportAdapter.notifyDataSetChanged();
     }
 
-    // Model class for a report.
     public static class Report {
         private String title;
         private String description;
         private String location;
         private String type;
+        private String imageUri;
 
-        public Report(String title, String description, String location, String type) {
+        public Report(String title, String description, String location, String type, String imageUri) {
             this.title = title;
             this.description = description;
             this.location = location;
             this.type = type;
+            this.imageUri = imageUri;
         }
 
         public String getTitle() { return title; }
         public String getDescription() { return description; }
         public String getLocation() { return location; }
         public String getType() { return type; }
+        public String getImageUri() { return imageUri; }
     }
 
-    // RecyclerView Adapter for displaying reports.
     public static class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportViewHolder> {
-
         public interface OnItemClickListener {
             void onItemClick(Report report);
         }
@@ -141,8 +142,7 @@ public class ReportsActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(ReportViewHolder holder, int position) {
-            Report report = reports.get(position);
-            holder.bind(report, listener);
+            holder.bind(reports.get(position), listener);
         }
 
         @Override
@@ -151,18 +151,32 @@ public class ReportsActivity extends AppCompatActivity {
         }
 
         public static class ReportViewHolder extends RecyclerView.ViewHolder {
+            ImageView reportImageView;
             TextView reportTitleTextView;
             TextView reportTypeTextView;
+            TextView reportLocationTextView;
 
             public ReportViewHolder(View itemView) {
                 super(itemView);
+                reportImageView = itemView.findViewById(R.id.reportImageView);
                 reportTitleTextView = itemView.findViewById(R.id.reportTitleTextView);
                 reportTypeTextView = itemView.findViewById(R.id.reportTypeTextView);
+                reportLocationTextView = itemView.findViewById(R.id.reportLocationTextView);
             }
 
             public void bind(Report report, OnItemClickListener listener) {
                 reportTitleTextView.setText(report.getTitle());
                 reportTypeTextView.setText(report.getType());
+                reportLocationTextView.setText(report.getLocation());
+
+                if (report.getImageUri() != null) {
+                    Glide.with(itemView.getContext())
+                            .load(Uri.parse(report.getImageUri()))
+                            .placeholder(R.drawable.ic_placeholder_item)
+                            .into(reportImageView);
+                } else {
+                    reportImageView.setImageResource(R.drawable.ic_placeholder_item);
+                }
                 itemView.setOnClickListener(v -> listener.onItemClick(report));
             }
         }
