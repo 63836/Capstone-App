@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,8 +22,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +41,7 @@ public class WebMapPickerActivity extends FragmentActivity implements OnMapReady
     private static final String TAG = "WebMapPickerActivity";
     private FusedLocationProviderClient fusedLocationClient;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private final LatLng defaultLocation = new LatLng(16.4115, 120.5899); // San Vicente, Baguio City
+    private final LatLng defaultLocation = new LatLng(16.3946, 120.5977); // San Vicente, Baguio City
     private static final float DEFAULT_ZOOM = 15f;
     private Map<Marker, AdminEventsActivity.EventItem> eventMarkers = new HashMap<>();
 
@@ -75,8 +79,20 @@ public class WebMapPickerActivity extends FragmentActivity implements OnMapReady
             return false;
         });
 
+        addSanVicentePolygon();
         enableMyLocation();
         addEventAndNewsMarkers();
+    }
+
+    private void addSanVicentePolygon() {
+        PolygonOptions sanVicentePolygon = new PolygonOptions()
+                .add(new LatLng(16.3960, 120.5960))
+                .add(new LatLng(16.3965, 120.5990))
+                .add(new LatLng(16.3930, 120.5995))
+                .add(new LatLng(16.3925, 120.5965))
+                .strokeColor(Color.RED)
+                .fillColor(Color.argb(50, 255, 0, 0));
+        mMap.addPolygon(sanVicentePolygon);
     }
 
     private void addEventAndNewsMarkers() {

@@ -17,10 +17,10 @@ public class EventRepository {
 
     // Static initializer to populate the list
     static {
-        eventList.add(new AdminEventsActivity.EventItem("Community Clean-up", "Join us for a community clean-up event", "", 300, 16.4110, 120.5965));
-        eventList.add(new AdminEventsActivity.EventItem("Charity Run", "Participate in a charity run for a good cause", "", 500, 16.4130, 120.5980));
-        eventList.add(new AdminEventsActivity.EventItem("Book Drive", "Donate books for the local library", "", 100, 16.4095, 120.5940));
-        eventList.add(new AdminEventsActivity.EventItem("Tree Planting", "Help us make our community greener", "", 200, 16.4150, 120.6000));
+        eventList.add(new AdminEventsActivity.EventItem("Community Clean-up", "Join us for a community clean-up event", "", 300, 16.3940, 120.5980));
+        eventList.add(new AdminEventsActivity.EventItem("Charity Run", "Participate in a charity run for a good cause", "", 500, 16.3950, 120.5970));
+        eventList.add(new AdminEventsActivity.EventItem("Book Drive", "Donate books for the local library", "", 100, 16.3935, 120.5960));
+        eventList.add(new AdminEventsActivity.EventItem("Tree Planting", "Help us make our community greener", "", 200, 16.3948, 120.5985));
     }
 
     public static List<AdminEventsActivity.EventItem> getEvents() {
