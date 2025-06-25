@@ -10,14 +10,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class AdminEventsActivity extends AppCompatActivity {
-    // Static list to store events
-    public static List<EventItem> eventList = new ArrayList<>();
+import ClientSide.EventsAndNews.EventRepository;
 
-    // EventItem class to represent each event
+public class AdminEventsActivity extends AppCompatActivity {
+    // Now gets the list from the repository
+    public static List<EventItem> eventList = EventRepository.eventList;
+
     public static class EventItem {
         private String title;
         private String description;
@@ -53,9 +53,9 @@ public class AdminEventsActivity extends AppCompatActivity {
         }
     }
 
-    // Add the static method so that other classes (like CreateEventActivity) can add events
+    // This method now adds events to the central repository
     public static void addEvent(EventItem event) {
-        eventList.add(event);
+        EventRepository.addEvent(event);
     }
 
     @Override
@@ -65,11 +65,7 @@ public class AdminEventsActivity extends AppCompatActivity {
 
         ListView eventsListView = findViewById(R.id.eventsListView);
 
-        // Add sample events if none exist
-        if (eventList.isEmpty()) {
-            eventList.add(new EventItem("Community Clean-up", "Join us for a community clean-up event", "", 300));
-            eventList.add(new EventItem("Charity Run", "Participate in a charity run for a good cause", "", 500));
-        }
+        // We no longer need to populate the list here, as it's done in the repository.
 
         ArrayAdapter<EventItem> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, eventList);

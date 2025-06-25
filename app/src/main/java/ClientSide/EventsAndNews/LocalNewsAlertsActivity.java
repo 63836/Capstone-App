@@ -15,7 +15,6 @@ public class LocalNewsAlertsActivity extends AppCompatActivity {
     private RecyclerView newsRecyclerView;
     private NewsAdapter newsAdapter;
 
-    // Static list to store news items (also used by admin to add news)
     public static List<NewsItem> newsList = new ArrayList<>();
 
     @Override
@@ -26,7 +25,13 @@ public class LocalNewsAlertsActivity extends AppCompatActivity {
         newsRecyclerView = findViewById(R.id.newsRecyclerView);
         newsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Fetch news from LocalNewsAlertsActivity.newsList
+        if (newsList.isEmpty()){
+            newsList.add(new NewsItem("New Art Exhibit", "A new art exhibit is opening at the local gallery.", "2024-01-15", "Admin", R.drawable.ic_art));
+            newsList.add(new NewsItem("Community Cleanup Drive", "Join the community cleanup drive this weekend.", "2024-01-20", "Admin", R.drawable.ic_cleanup));
+            newsList.add(new NewsItem("Tech Talk: The Future of AI", "A tech talk on the future of AI will be held at the university.", "2024-01-22", "Admin", R.drawable.ic_tech));
+            newsList.add(new NewsItem("Local Marathon", "Participate in the annual city marathon.", "2024-01-25", "Admin", R.drawable.ic_fitness));
+            newsList.add(new NewsItem("Food Festival", "Enjoy a variety of cuisines at the upcoming food festival.", "2024-01-28", "Admin", R.drawable.ic_food));
+        }
         newsAdapter = new NewsAdapter(this, newsList);
         newsRecyclerView.setAdapter(newsAdapter);
     }
@@ -34,16 +39,13 @@ public class LocalNewsAlertsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Refresh the list when the activity resumes
         newsAdapter.notifyDataSetChanged();
     }
 
-    // Method to add a news item (called by CreateEventActivity)
     public static void addNewsItem(NewsItem newsItem) {
         newsList.add(newsItem);
     }
 
-    // NewsItem inner class
     public static class NewsItem {
         private String title;
         private String description;

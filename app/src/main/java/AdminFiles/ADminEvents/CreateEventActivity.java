@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import ClientSide.EventsAndNews.EventRepository;
 import ClientSide.EventsAndNews.LocalNewsAlertsActivity;
 import ClientSide.Notifications.NotificationCenter;
 import ClientSide.Notifications.NotificationItem;
@@ -104,12 +105,13 @@ public class CreateEventActivity extends AppCompatActivity {
                 return;
             }
             int pointsOffered = Integer.parseInt(pointsOfferedStr);
-            AdminEventsActivity.addEvent(new AdminEventsActivity.EventItem(title, description, imageUriStr, pointsOffered));
+            // Use the centralized EventRepository to add the event
+            EventRepository.addEvent(new AdminEventsActivity.EventItem(title, description, imageUriStr, pointsOffered));
             NotificationCenter.addNotification(new NotificationItem(title, "Event", imageUriStr));
             NotificationStatus.hasNewAnnouncement = true;
             Toast.makeText(this, "Event posted", Toast.LENGTH_LONG).show();
         } else if (category.equals("News")) {
-            LocalNewsAlertsActivity.addNewsItem(new LocalNewsAlertsActivity.NewsItem(title, description, getCurrentDate(), "Admin", R.drawable.free_bell_icon_860_thumb));
+            LocalNewsAlertsActivity.addNewsItem(new LocalNewsAlertsActivity.NewsItem(title, description, getCurrentDate(), "Admin", R.drawable.ic_default)); // Using a default icon
             NotificationCenter.addNotification(new NotificationItem(title, "News", null));
             NotificationStatus.hasNewAnnouncement = true;
             Toast.makeText(this, "News alert posted", Toast.LENGTH_LONG).show();
