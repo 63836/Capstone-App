@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import AdminFiles.ADminEvents.AdminEventsActivity;
-import ClientSide.EventsAndNews.EventDetailsBottomSheetFragment;
+import ClientSide.EventsAndNews.EventDialogFragment;
 import ClientSide.EventsAndNews.EventRepository;
 import ClientSide.EventsAndNews.LocalNewsAlertsActivity;
 
@@ -72,8 +72,8 @@ public class WebMapPickerActivity extends FragmentActivity implements OnMapReady
         mMap.setOnMarkerClickListener(marker -> {
             AdminEventsActivity.EventItem eventItem = eventMarkers.get(marker);
             if (eventItem != null) {
-                EventDetailsBottomSheetFragment bottomSheet = EventDetailsBottomSheetFragment.newInstance(eventItem);
-                bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
+                EventDialogFragment dialogFragment = EventDialogFragment.newInstance(eventItem);
+                dialogFragment.show(getSupportFragmentManager(), "EventDialogFragment");
                 return true; // Consume the event
             }
             return false;

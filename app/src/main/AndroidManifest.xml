@@ -58,9 +58,12 @@
         <activity android:name="ClientSide.Reports.ReportConcernActivity" />
         <activity android:name="AdminFiles.AddminRewards.AdminAddRewardActivity" android:exported="true" />
         <activity android:name="ClientSide.Rewards.RewardsActivity" android:exported="true" />
-        <activity android:name=".WebMapPickerActivity"
+        <activity
+            android:name=".WebMapPickerActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:label="@string/title_activity_web_map_picker"
+            android:theme="@style/Theme.MyApplication.NoActionBar" />
+
 
         <provider
             android:name="androidx.core.content.FileProvider"
