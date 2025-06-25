@@ -9,23 +9,37 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import AdminFiles.ADminEvents.AdminEventsActivity;
+import ClientSide.EventsAndNews.EventDetailsBottomSheetFragment;
+import ClientSide.EventsAndNews.EventRepository;
+import ClientSide.EventsAndNews.LocalNewsAlertsActivity;
 
 public class WebMapPickerActivity extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private static final String TAG = "WebMapPickerActivity";
     private FusedLocationProviderClient fusedLocationClient;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private final LatLng defaultLocation = new LatLng(16.4165, 120.5951); // Default to Baguio City
-    private static final float DEFAULT_ZOOM = 17f;
+    private final LatLng defaultLocation = new LatLng(16.4115, 120.5899); // San Vicente, Baguio City
+    private static final float DEFAULT_ZOOM = 15f;
+    private Map<Marker, AdminEventsActivity.EventItem> eventMarkers = new HashMap<>();
 
 
     @Override
@@ -40,7 +54,6 @@ public class WebMapPickerActivity extends FragmentActivity implements OnMapReady
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         } else {
-            // Corrected the Log.e call to use the correct (String, String) signature.
             Log.e(TAG, "SupportMapFragment not found!");
         }
     }
@@ -52,8 +65,45 @@ public class WebMapPickerActivity extends FragmentActivity implements OnMapReady
         mMap.setBuildingsEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        // Turn on the My Location layer and get the current location of the device.
+        mMap.setOnMarkerClickListener(marker -> {
+            AdminEventsActivity.EventItem eventItem = eventMarkers.get(marker);
+            if (eventItem != null) {
+                EventDetailsBottomSheetFragment bottomSheet = EventDetailsBottomSheetFragment.newInstance(eventItem);
+                bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
+                return true; // Consume the event
+            }
+            return false;
+        });
+
         enableMyLocation();
+        addEventAndNewsMarkers();
+    }
+
+    private void addEventAndNewsMarkers() {
+        // Add markers for events
+        List<AdminEventsActivity.EventItem> events = EventRepository.getEvents();
+        for (AdminEventsActivity.EventItem event : events) {
+            LatLng eventLocation = new LatLng(event.getLatitude(), event.getLongitude());
+            Marker marker = mMap.addMarker(new MarkerOptions()
+                    .position(eventLocation)
+                    .title("Event: " + event.getTitle())
+                    .snippet(event.getDescription())
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            if (marker != null) {
+                eventMarkers.put(marker, event);
+            }
+        }
+
+        // Add markers for news
+        List<LocalNewsAlertsActivity.NewsItem> newsItems = LocalNewsAlertsActivity.getNews();
+        for (LocalNewsAlertsActivity.NewsItem news : newsItems) {
+            LatLng newsLocation = new LatLng(news.getLatitude(), news.getLongitude());
+            mMap.addMarker(new MarkerOptions()
+                    .position(newsLocation)
+                    .title("News: " + news.getTitle())
+                    .snippet(news.getDescription())
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        }
     }
 
     /**
@@ -67,41 +117,27 @@ public class WebMapPickerActivity extends FragmentActivity implements OnMapReady
                 getDeviceLocation();
             }
         } else {
-            // Permission to access the location is missing. Show rationale and request permission
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
 
-    /**
-     * Handles the result of the permission request.
-     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
-            // If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission was granted.
                 enableMyLocation();
             } else {
-                // Permission denied. Move camera to default location.
                 moveCamera(defaultLocation, DEFAULT_ZOOM);
             }
         }
     }
 
-    /**
-     * Gets the current location of the device, and positions the map's camera.
-     */
     private void getDeviceLocation() {
-        /*
-         * The try/catch block is a failsafe for a rare case where the user removes the
-         * permission while the app is running.
-         */
         try {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
@@ -109,7 +145,6 @@ public class WebMapPickerActivity extends FragmentActivity implements OnMapReady
                 fusedLocationClient.getLastLocation()
                         .addOnSuccessListener(this, location -> {
                             if (location != null) {
-                                // Set the map's camera position to the current location of the device.
                                 LatLng currentLatLng = new LatLng(location.getLatitude(),
                                         location.getLongitude());
                                 moveCamera(currentLatLng, DEFAULT_ZOOM);
@@ -124,9 +159,6 @@ public class WebMapPickerActivity extends FragmentActivity implements OnMapReady
         }
     }
 
-    /**
-     * Moves the camera to a specified location and zoom level.
-     */
     private void moveCamera(LatLng latLng, float zoom) {
         CameraPosition position = new CameraPosition.Builder()
                 .target(latLng)

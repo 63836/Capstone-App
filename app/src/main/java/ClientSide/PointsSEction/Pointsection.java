@@ -28,9 +28,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.WebMapPickerActivity;
 import com.google.android.material.card.MaterialCardView;
-import com.journeyapps.barcodescanner.ScanContract;
-import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +39,7 @@ import java.util.List;
 import java.util.Locale;
 
 import ClientSide.EventsAndNews.EventPageActivity;
+import ClientSide.EventsAndNews.EventRepository;
 import ClientSide.EventsAndNews.LocalNewsAlertsActivity;
 import ClientSide.LoginAndSignup.MainActivity;
 import ClientSide.Notifications.NotificationBottomSheet;
@@ -50,6 +50,7 @@ import ClientSide.Transaction.Transaction;
 import ClientSide.Transaction.TransactionAdapter;
 import ClientSide.Transaction.TransactionAdapter.ProofOfClaimActivity;
 import ClientSide.Transaction.TransactionData;
+import AdminFiles.ADminEvents.AdminEventsActivity;
 
 public class Pointsection extends AppCompatActivity {
 
@@ -60,7 +61,7 @@ public class Pointsection extends AppCompatActivity {
 
     private int currentPoints = 0;
     private TextView numberTextView;
-    private MaterialCardView fileReportButton, scanButton, eventsButton, newsAlertsButton, rewardsButton;
+    private MaterialCardView fileReportButton, mapButton, eventsButton, newsAlertsButton, rewardsButton;
     private String currentPhotoPath;
     private Button closeChatbot;
 
@@ -77,26 +78,6 @@ public class Pointsection extends AppCompatActivity {
     private TransactionAdapter transactionAdapter;
     private List<Transaction> transactionList;
 
-
-
-    // Launcher for barcode scanning
-    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
-            new ScanContract(),
-            result -> {
-                if (result.getContents() != null) {
-                    try {
-                        int scannedPoints = Integer.parseInt(result.getContents());
-                        addPoints(scannedPoints);
-                        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date());
-                        String uniqueCode = "TX-" + new SimpleDateFormat("yyyyMMddHHmmss", Locale.US).format(new Date());
-                        TransactionData.addTransaction("QR Code Scan", scannedPoints, currentDate, uniqueCode);
-                        transactionAdapter.notifyItemInserted(0);
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(this, "Invalid QR Code. Please scan a valid point QR code.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +127,7 @@ public class Pointsection extends AppCompatActivity {
         // Main controls
         numberTextView = findViewById(R.id.numberTextView);
         fileReportButton = findViewById(R.id.fileReportButton);
-        scanButton       = findViewById(R.id.scanButton);
+        mapButton = findViewById(R.id.mapButton);
         eventsButton     = findViewById(R.id.eventsButton);
         newsAlertsButton = findViewById(R.id.newsAlertsButton);
         rewardsButton    = findViewById(R.id.rewardsButton);
@@ -156,7 +137,10 @@ public class Pointsection extends AppCompatActivity {
             Toast.makeText(this, "Navigating to Report/Concern", Toast.LENGTH_SHORT).show();
         });
 
-        scanButton.setOnClickListener(v -> launchScanner());
+        mapButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Pointsection.this, WebMapPickerActivity.class);
+            startActivity(intent);
+        });
 
         eventsButton.setOnClickListener(v -> {
             Intent intent = new Intent(Pointsection.this, EventPageActivity.class);
@@ -217,14 +201,6 @@ public class Pointsection extends AppCompatActivity {
         }
     }
 
-    private void launchScanner() {
-        ScanOptions opts = new ScanOptions();
-        opts.setPrompt("Scan a QR Code containing a number");
-        opts.setBeepEnabled(true);
-        opts.setBarcodeImageEnabled(true);
-        barcodeLauncher.launch(opts);
-    }
-
     private void addPoints(int points) {
         currentPoints += points;
         updatePointsDisplay();
@@ -246,25 +222,4 @@ public class Pointsection extends AppCompatActivity {
         return image;
     }
 
-
-    // Optional chatbot animations...
-    private void showChatbotPanel() {
-        chatbotPanel.setVisibility(View.VISIBLE);
-        ScaleAnimation anim = new ScaleAnimation(
-                0.5f, 1.0f, 0.5f, 1.0f,
-                ScaleAnimation.RELATIVE_TO_SELF, 1.0f,
-                ScaleAnimation.RELATIVE_TO_SELF, 1.0f);
-        anim.setDuration(200);
-        chatbotPanel.startAnimation(anim);
-    }
-
-    private void hideChatbotPanel() {
-        ScaleAnimation anim = new ScaleAnimation(
-                1.0f, 0.5f, 1.0f, 0.5f,
-                ScaleAnimation.RELATIVE_TO_SELF, 1.0f,
-                ScaleAnimation.RELATIVE_TO_SELF, 1.0f);
-        anim.setDuration(200);
-        chatbotPanel.startAnimation(anim);
-        chatbotPanel.setVisibility(View.GONE);
-    }
 }

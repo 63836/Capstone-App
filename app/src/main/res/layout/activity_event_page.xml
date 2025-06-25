@@ -28,13 +28,13 @@
             android:layout_height="wrap_content"
             android:background="@color/primary_green_dark"
             app:tabMode="scrollable"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="@android:color/white"
-        app:tabIndicatorHeight="4dp"
-        app:tabSelectedTextColor="@android:color/white"
-        app:tabTextColor="@color/white_translucent"
-        app:tabTextAppearance="@style/CustomTabTextAppearance"
-        app:tabRippleColor="@color/white"/>
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@android:color/white"
+            app:tabIndicatorHeight="4dp"
+            app:tabSelectedTextColor="@android:color/white"
+            app:tabTextColor="@color/white_translucent"
+            app:tabTextAppearance="@style/CustomTabTextAppearance"
+            app:tabRippleColor="@color/white"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

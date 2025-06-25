@@ -39,9 +39,7 @@
 
         <activity android:name="ClientSide.Transaction.TransactionAdapter$ProofOfClaimActivity" android:exported="false" />
         <activity android:name="ClientSide.PointsSEction.Pointsection" android:exported="false" />
-        <activity android:name="com.journeyapps.barcodescanner.CaptureActivity" />
         <activity android:name="ClientSide.EventsAndNews.EventPageActivity" />
-        <activity android:name="ClientSide.QRscan.QRCodeActivity" />
         <activity android:name="ClientSide.LoginAndSignup.MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

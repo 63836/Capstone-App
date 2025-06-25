@@ -14,7 +14,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        // For better security, consider moving this key to your local.properties file
+        // For better security, consider moving this key to
+        // your local.properties file
         buildConfigField ("String", "GROQ_API_KEY", "\"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\"")
     }
 
@@ -54,7 +55,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.aallam.openai:openai-client:3.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")

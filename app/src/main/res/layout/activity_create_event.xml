@@ -1,86 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="@color/light_background_color"
+    tools:context="AdminFiles.ADminEvents.CreateEventActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="24dp">
 
         <TextView
-            android:id="@+id/createEventTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create Event Announcement"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="24dp"
-            android:fontFamily="@font/alexandria_bold" />
+            android:text="Create New Event or News"
+            android:textSize="28sp"
+            android:fontFamily="@font/alexandria_bold"
+            android:textColor="@color/primary_green"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp"/>
 
-        <EditText
-            android:id="@+id/eventTitleEditText"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Title"
-            android:padding="8dp"/>
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp">
 
-        <EditText
-            android:id="@+id/eventDescriptionEditText"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/titleEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Title"
+                android:inputType="textCapWords" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Description"
-            android:inputType="textMultiLine"
-            android:minLines="3"
-            android:layout_marginTop="16dp"
-            android:padding="8dp"/>
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp">
 
-        <Spinner
-            android:id="@+id/categorySpinner"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/descriptionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Description"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp" />
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp">
 
-        <!-- Points Offered field for events -->
-        <EditText
-            android:id="@+id/pointsOfferedEditText"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/pointsEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Points Offered"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Points Offered"
-            android:inputType="number"
-            android:layout_marginTop="16dp"
-            android:visibility="gone"
-            android:padding="8dp" />
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/latitudeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Latitude"
+                android:inputType="numberDecimal|numberSigned" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/longitudeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Longitude"
+                android:inputType="numberDecimal|numberSigned" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             android:id="@+id/eventImageView"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_placeholder_item"
             android:scaleType="centerCrop"
-            android:background="@android:color/darker_gray" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"/>
 
         <Button
-            android:id="@+id/uploadImageButton"
+            android:id="@+id/selectImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upload Picture"
-            android:layout_marginTop="8dp" />
+            android:text="Select Image"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp"/>
 
-        <Button
-            android:id="@+id/postAnnouncementButton"
+        <RadioGroup
+            android:id="@+id/typeRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Post Announcement"
-            android:layout_marginTop="24dp" />
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
+
+            <RadioButton
+                android:id="@+id/eventRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Event"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/newsRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="News"
+                android:layout_marginStart="16dp"/>
+        </RadioGroup>
 
         <Button
-            android:id="@+id/backButton"
+            android:id="@+id/createButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Back to Admin Panel" />
+            android:layout_height="60dp"
+            android:text="Create"
+            android:textSize="18sp"
+            app:cornerRadius="8dp"/>
+
     </LinearLayout>
 </ScrollView>

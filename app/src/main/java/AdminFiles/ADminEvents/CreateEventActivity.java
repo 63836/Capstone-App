@@ -4,125 +4,108 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import ClientSide.EventsAndNews.EventRepository;
-import ClientSide.EventsAndNews.LocalNewsAlertsActivity;
-import ClientSide.Notifications.NotificationCenter;
-import ClientSide.Notifications.NotificationItem;
-import ClientSide.Notifications.NotificationStatus;
 import com.example.myapplication.R;
-
+import ClientSide.EventsAndNews.LocalNewsAlertsActivity;
+import ClientSide.EventsAndNews.EventRepository;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 public class CreateEventActivity extends AppCompatActivity {
-    private static final int PICK_IMAGE_REQUEST = 1;
 
-    private EditText titleEditText, descriptionEditText, pointsOfferedEditText;
-    private Spinner categorySpinner;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private EditText titleEditText, descriptionEditText, pointsEditText, latitudeEditText, longitudeEditText;
     private ImageView eventImageView;
-    private Button uploadImageButton, postAnnouncementButton, backButton;
-    private Uri selectedImageUri;
+    private RadioGroup typeRadioGroup;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
-        titleEditText = findViewById(R.id.eventTitleEditText);
-        descriptionEditText = findViewById(R.id.eventDescriptionEditText);
-        pointsOfferedEditText = findViewById(R.id.pointsOfferedEditText);
-        categorySpinner = findViewById(R.id.categorySpinner);
+        titleEditText = findViewById(R.id.titleEditText);
+        descriptionEditText = findViewById(R.id.descriptionEditText);
+        pointsEditText = findViewById(R.id.pointsEditText);
+        latitudeEditText = findViewById(R.id.latitudeEditText);
+        longitudeEditText = findViewById(R.id.longitudeEditText);
         eventImageView = findViewById(R.id.eventImageView);
-        uploadImageButton = findViewById(R.id.uploadImageButton);
-        postAnnouncementButton = findViewById(R.id.postAnnouncementButton);
-        backButton = findViewById(R.id.backButton);
+        typeRadioGroup = findViewById(R.id.typeRadioGroup);
 
-        // Set up spinner with "Event" and "News" options
-        String[] categories = {"Event", "News"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categorySpinner.setAdapter(adapter);
-
-        // Show the Points Offered field only when "Event" is selected
-        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        Button selectImageButton = findViewById(R.id.selectImageButton);
+        selectImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCategory = categorySpinner.getSelectedItem().toString();
-                int visibility = selectedCategory.equals("Event") ? View.VISIBLE : View.GONE;
-                pointsOfferedEditText.setVisibility(visibility);
+            public void onClick(View v) {
+                openFileChooser();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) { }
         });
 
-        uploadImageButton.setOnClickListener(v -> openImagePicker());
-        postAnnouncementButton.setOnClickListener(v -> postAnnouncement());
-        backButton.setOnClickListener(v -> finish());
+        Button createButton = findViewById(R.id.createButton);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createItem();
+            }
+        });
     }
 
-    private void openImagePicker() {
+    private void openFileChooser() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            selectedImageUri = data.getData();
-            eventImageView.setImageURI(selectedImageUri);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            eventImageView.setImageURI(imageUri);
         }
     }
 
-    private void postAnnouncement() {
+    private void createItem() {
         String title = titleEditText.getText().toString().trim();
         String description = descriptionEditText.getText().toString().trim();
-        String category = categorySpinner.getSelectedItem().toString();
-        String imageUriStr = (selectedImageUri != null) ? selectedImageUri.toString() : null;
+        String pointsStr = pointsEditText.getText().toString().trim();
+        String latitudeStr = latitudeEditText.getText().toString().trim();
+        String longitudeStr = longitudeEditText.getText().toString().trim();
 
-        if (title.isEmpty() || description.isEmpty()) {
-            Toast.makeText(this, "Title and Description are required", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(description) || TextUtils.isEmpty(latitudeStr) || TextUtils.isEmpty(longitudeStr)) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (category.equals("Event")) {
-            String pointsOfferedStr = pointsOfferedEditText.getText().toString().trim();
-            if (pointsOfferedStr.isEmpty()) {
-                Toast.makeText(this, "Points Offered is required for events", Toast.LENGTH_SHORT).show();
+        double latitude = Double.parseDouble(latitudeStr);
+        double longitude = Double.parseDouble(longitudeStr);
+        String imageUriStr = (imageUri != null) ? imageUri.toString() : "";
+
+        int selectedTypeId = typeRadioGroup.getCheckedRadioButtonId();
+        RadioButton selectedRadioButton = findViewById(selectedTypeId);
+
+        if (selectedRadioButton.getText().toString().equals("Event")) {
+            if (TextUtils.isEmpty(pointsStr)) {
+                Toast.makeText(this, "Please enter points for the event", Toast.LENGTH_SHORT).show();
                 return;
             }
-            int pointsOffered = Integer.parseInt(pointsOfferedStr);
-            // Use the centralized EventRepository to add the event
-            EventRepository.addEvent(new AdminEventsActivity.EventItem(title, description, imageUriStr, pointsOffered));
-            NotificationCenter.addNotification(new NotificationItem(title, "Event", imageUriStr));
-            NotificationStatus.hasNewAnnouncement = true;
-            Toast.makeText(this, "Event posted", Toast.LENGTH_LONG).show();
-        } else if (category.equals("News")) {
-            LocalNewsAlertsActivity.addNewsItem(new LocalNewsAlertsActivity.NewsItem(title, description, getCurrentDate(), "Admin", R.drawable.ic_default)); // Using a default icon
-            NotificationCenter.addNotification(new NotificationItem(title, "News", null));
-            NotificationStatus.hasNewAnnouncement = true;
-            Toast.makeText(this, "News alert posted", Toast.LENGTH_LONG).show();
+            int pointsOffered = Integer.parseInt(pointsStr);
+            EventRepository.addEvent(new AdminEventsActivity.EventItem(title, description, imageUriStr, pointsOffered, latitude, longitude));
+            Toast.makeText(this, "Event created successfully", Toast.LENGTH_SHORT).show();
+        } else {
+            LocalNewsAlertsActivity.addNewsItem(new LocalNewsAlertsActivity.NewsItem(title, description, getCurrentDate(), "Admin", R.drawable.ic_default, latitude, longitude)); // Using a default icon
+            Toast.makeText(this, "News created successfully", Toast.LENGTH_SHORT).show();
         }
-
-        // Clear the form
-        titleEditText.setText("");
-        descriptionEditText.setText("");
-        pointsOfferedEditText.setText("");
-        eventImageView.setImageResource(android.R.color.transparent);
-        selectedImageUri = null;
+        finish();
     }
 
     private String getCurrentDate() {

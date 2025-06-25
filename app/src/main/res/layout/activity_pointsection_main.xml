@@ -9,7 +9,6 @@
     android:background="@color/light_background_color"
     tools:context="ClientSide.PointsSEction.Pointsection">
 
-    <!-- Toolbar with header text and Notification Icon -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -23,7 +22,6 @@
             android:layout_height="match_parent">
 
 
-            <!-- Notification Icon with Red Dot Indicator -->
             <FrameLayout
                 android:id="@+id/notificationFrame"
                 android:layout_width="wrap_content"
@@ -39,7 +37,6 @@
                     android:layout_height="31dp"
                     android:src="@drawable/free_bell_icon_860_thumb" />
 
-                <!-- Red dot indicator -->
                 <View
                     android:id="@+id/redDot"
                     android:layout_width="8dp"
@@ -54,7 +51,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Main Content -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -69,7 +65,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Available Points Card -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/pointsCard"
                 android:layout_width="match_parent"
@@ -105,9 +100,8 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Scan QR Code Button -->
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/scanButton"
+                android:id="@+id/mapButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
@@ -125,34 +119,22 @@
                     android:padding="24dp">
 
                     <ImageView
-                        android:id="@+id/qrCodeImage"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/ic_qr_code"
+                        android:src="@android:drawable/ic_dialog_map"
                         app:tint="@color/primary_green"/>
 
                     <TextView
-                        android:id="@+id/scanText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Scan QR Code to Add Points"
+                        android:text="Map"
                         android:textSize="16sp"
                         android:textColor="@color/primary_green_dark"
                         android:fontFamily="@font/alexandria_bold"
                         android:layout_marginTop="12dp"/>
-
-                    <TextView
-                        android:id="@+id/tapScanText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tap to Scan"
-                        android:textSize="14sp"
-                        android:textColor="@color/primary_green_darker"
-                        android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- File a Report/Concern Button -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/fileReportButton"
                 android:layout_width="match_parent"
@@ -199,7 +181,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Events Button -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/eventsButton"
                 android:layout_width="match_parent"
@@ -246,7 +227,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- News & Alerts Button -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/newsAlertsButton"
                 android:layout_width="match_parent"
@@ -293,7 +273,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Rewards Button -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/rewardsButton"
                 android:layout_width="match_parent"

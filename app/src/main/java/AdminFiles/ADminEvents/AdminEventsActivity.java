@@ -10,25 +10,29 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ClientSide.EventsAndNews.EventRepository;
 
 public class AdminEventsActivity extends AppCompatActivity {
-    // Now gets the list from the repository
     public static List<EventItem> eventList = EventRepository.eventList;
 
-    public static class EventItem {
+    public static class EventItem implements Serializable {
         private String title;
         private String description;
         private String imageUri;
         private int pointsOffered;
+        private double latitude;
+        private double longitude;
 
-        public EventItem(String title, String description, String imageUri, int pointsOffered) {
+        public EventItem(String title, String description, String imageUri, int pointsOffered, double latitude, double longitude) {
             this.title = title;
             this.description = description;
             this.imageUri = imageUri;
             this.pointsOffered = pointsOffered;
+            this.latitude = latitude;
+            this.longitude = longitude;
         }
 
         public String getTitle() {
@@ -47,13 +51,20 @@ public class AdminEventsActivity extends AppCompatActivity {
             return pointsOffered;
         }
 
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public double getLongitude() {
+            return longitude;
+        }
+
         @Override
         public String toString() {
             return title;
         }
     }
 
-    // This method now adds events to the central repository
     public static void addEvent(EventItem event) {
         EventRepository.addEvent(event);
     }
@@ -64,8 +75,6 @@ public class AdminEventsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_events);
 
         ListView eventsListView = findViewById(R.id.eventsListView);
-
-        // We no longer need to populate the list here, as it's done in the repository.
 
         ArrayAdapter<EventItem> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, eventList);
