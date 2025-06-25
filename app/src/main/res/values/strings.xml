@@ -43,5 +43,9 @@
     </string-array>
 
     <string name="title_activity_web_map_picker">Map</string>
+    <string-array name="map_types">
+        <item>3D Map</item>
+        <item>Static Map</item>
+    </string-array>
 
 </resources>

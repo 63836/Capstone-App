@@ -6,6 +6,10 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -44,6 +48,7 @@ public class WebMapPickerActivity extends FragmentActivity implements OnMapReady
     private final LatLng defaultLocation = new LatLng(16.3946, 120.5977); // San Vicente, Baguio City
     private static final float DEFAULT_ZOOM = 15f;
     private Map<Marker, AdminEventsActivity.EventItem> eventMarkers = new HashMap<>();
+    private Spinner mapTypeSpinner;
 
 
     @Override
@@ -60,6 +65,13 @@ public class WebMapPickerActivity extends FragmentActivity implements OnMapReady
         } else {
             Log.e(TAG, "SupportMapFragment not found!");
         }
+
+        mapTypeSpinner = findViewById(R.id.map_type_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.map_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mapTypeSpinner.setAdapter(adapter);
+
     }
 
     @Override
@@ -68,6 +80,26 @@ public class WebMapPickerActivity extends FragmentActivity implements OnMapReady
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.setBuildingsEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        mapTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedType = parent.getItemAtPosition(position).toString();
+                if (selectedType.equals("Static Map")) {
+                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    mMap.setBuildingsEnabled(false);
+                } else if (selectedType.equals("3D Map")) {
+                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    mMap.setBuildingsEnabled(true);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
+
 
         mMap.setOnMarkerClickListener(marker -> {
             AdminEventsActivity.EventItem eventItem = eventMarkers.get(marker);
