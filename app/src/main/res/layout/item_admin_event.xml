@@ -1,44 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="6dp"
-    app:cardBackgroundColor="@color/white">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginBottom="8dp"
+    android:background="@android:drawable/dialog_holo_light_frame">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/eventTitleTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:text="Event Title"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/adminEventTitleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Event Title"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/alexandria_bold"/>
+    <TextView
+        android:id="@+id/eventDescriptionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Description"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"/>
 
-        <TextView
-            android:id="@+id/adminEventDescriptionTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Event Description"
-            android:layout_marginTop="4dp"
-            android:textSize="16sp"/>
+    <TextView
+        android:id="@+id/eventPointsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Points: 0"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"/>
 
-        <TextView
-            android:id="@+id/adminEventParticipantCountTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Participants: 0"
-            android:layout_marginTop="4dp"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="14sp"/>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+</LinearLayout>

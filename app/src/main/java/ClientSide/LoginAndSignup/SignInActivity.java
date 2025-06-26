@@ -57,7 +57,11 @@ public class SignInActivity extends AppCompatActivity {
             long id = db.insertUser(name, email, pass, phone, gender);
             if (id > 0) {
                 Toast.makeText(this, "Registered (ID=" + id + ")", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, MainActivity.class));
+                Intent intent = new Intent(this, Pointsection.class);
+                intent.putExtra("USER_NAME", name);
+                intent.putExtra("USER_GENDER", gender);
+                intent.putExtra("USER_CONTACT", phone);
+                startActivity(intent);
                 finish();
             } else {
                 Toast.makeText(this, "Email already used or error", Toast.LENGTH_SHORT).show();

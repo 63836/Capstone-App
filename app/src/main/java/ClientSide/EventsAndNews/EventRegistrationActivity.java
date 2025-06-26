@@ -23,11 +23,21 @@ public class EventRegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_registration);
 
         eventTitle = getIntent().getStringExtra("eventTitle");
+        String userName = getIntent().getStringExtra("USER_NAME");
+        String userGender = getIntent().getStringExtra("USER_GENDER");
+        String userContact = getIntent().getStringExtra("USER_CONTACT");
 
         nameEditText = findViewById(R.id.regNameEditText);
         genderEditText = findViewById(R.id.regGenderEditText);
         contactEditText = findViewById(R.id.regContactEditText);
         registerButton = findViewById(R.id.regRegisterButton);
+
+        if (userName != null && userGender != null && userContact != null) {
+            nameEditText.setText(userName);
+            genderEditText.setText(userGender);
+            contactEditText.setText(userContact);
+        }
+
 
         registerButton.setOnClickListener(new View.OnClickListener(){
             @Override
