@@ -91,6 +91,21 @@ public class WebMapPickerActivity extends FragmentActivity implements OnMapReady
                 } else if (selectedType.equals("3D Map")) {
                     mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                     mMap.setBuildingsEnabled(true);
+                } else if (selectedType.equals("Photorealistic 3D")) {
+                    // Use Satellite map type for photorealistic tiles
+                    mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                    mMap.setBuildingsEnabled(true);
+
+                    // Position the camera to a location with good 3D data
+                    // Example: New York City
+                    LatLng nyc = new LatLng(40.7484, -73.9857);
+                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                            .target(nyc)      // Sets the center of the map to NYC
+                            .zoom(18)         // Sets the zoom
+                            .bearing(90)      // Sets the orientation of the camera to east
+                            .tilt(45)         // Sets the tilt of the camera to 45 degrees
+                            .build();         // Creates a CameraPosition from the builder
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 }
             }
 

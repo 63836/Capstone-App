@@ -31,20 +31,10 @@
         android:textSize="16sp"
         android:layout_marginBottom="16dp"/>
 
-    <TextView
-        android:id="@+id/eventDateTextView"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Date:"
-        android:textSize="16sp"
-        android:layout_marginBottom="8dp"/>
-
-    <TextView
-        android:id="@+id/eventTimeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Time:"
-        android:textSize="16sp"
-        android:layout_marginBottom="16dp"/>
+        android:text="Register"/>
 
 </LinearLayout>

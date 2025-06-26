@@ -44,8 +44,9 @@
 
     <string name="title_activity_web_map_picker">Map</string>
     <string-array name="map_types">
-        <item>3D Map</item>
         <item>Static Map</item>
+        <item>3D Map</item>
+        <item>Photorealistic 3D</item>
     </string-array>
 
 </resources>
